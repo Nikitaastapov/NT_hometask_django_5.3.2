@@ -1,0 +1,31 @@
+1) pip install -r requirements.txt - установка бибилиотек из файла requirements.txt
+2) в папке проекта заходим в файл settings.py раздел INSTALLED_APPS и прописываем созданные приложения
+3) в settings.py в разделе database меняем SQL-lite на postgress:
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'netology_models_list',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+    }
+4) создание БД
+createdb -U postgres netology_models_list
+5) установка драйвера для БД 
+pip install psycopg2-binary
+6) python3 manage.py migrate - создание структуры базы данных
+7) python3 manage.py makemigrations - отправка изменений + python manage.py migrate
+8) python3 manage.py createsuperuser - создание пользователя для Админ
+9) python3 manage.py runserver - запуск сервера
+10) Для загрузки начальных данных модели Book необходимо выполнить команду:
+python3 manage.py loaddata fixtures/books.json
+
+10) python manage.py shell - спец интерпретатор django
+запись в БД
+from main.models import Products -импортируем класс Product из файла models
+prod1 = Products(name = "Apple Iphone 14", description = "mobile phone", price = 120000) - создали экземпляр класса и заполнили БД
+prod1.save() - сохранили запись в БД
+или
+Products.objects.create(name = "Apple Iphone 13", description = "mobile phone", price = 100000)
+
