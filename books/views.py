@@ -11,24 +11,27 @@ def books_view(request):
 
 def book_date(request, pub_date):
     template = 'books/books_date.html'
-    list_book_filt = Book.objects.filter(pub_date = pub_date)
-    paginator = Paginator(list_book_filt, 1)
-    # sort_list = Book.objects.order_by('pub_date')
-    
-    previous_page = None 
-    next_page = None
-    def show_date(pub_date, next_page, previous_page):
-        f_d = Book.objects.filter(pub_date__lt= pub_date).values('pub_date').first()
-        if f_d.exists():
-            previous_page = f_d
-        n_d = Book.objects.filter(pub_date__gt=pub_date).values('pub_date').first()
-        if n_d.exists():
-            next_page = n_d
-        
-        
-    
-        
-    
-
-    context = {'list_book': paginator.object_list, 'page': {'up': next_page, 'down': previous_page}}
+    books_objects = Book.objects.filter(pub_date=pub_date)
+    books_next = (Book.objects.filter(pub_date__gt=pub_date).order_by('pub_date').first())
+    if books_next:
+        books_next = str(books_next.pub_date)
+    # books_next = str(Book.objects.filter(pub_date__gt=pub_date).order_by('pub_date').first().pub_date)
+    else:
+        books_next = None
+    books_previous = Book.objects.filter(pub_date__lt=pub_date).order_by('pub_date').first()
+    if books_previous:
+        books_previous = str(books_previous.pub_date)
+    else:
+        books_previous = None
+        # books_previous = str(Book.objects.filter(pub_date__lt=pub_date).order_by('pub_date').first().pub_date)
+    context = {
+        'books': books_objects,
+        'next_book': books_next,
+        'previous_book': books_previous,
+    }
     return render(request, template, context)
+        
+        
+    
+        
+  
